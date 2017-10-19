@@ -1,0 +1,2 @@
+COD_TRD;COD_ORGA;COD_SERI;COD_SUBS;ARC_GEST;ARC_CENT;BAN_CT;BAN_E;BAN_M;BAN_S;TEX_OBSE
+Codigo TRD;Codigo Oficina productora;Codigo Serie;Codigo Subserie;Gestión;Central;Conservación Total (0 = No, 1 = Si);Eliminación  (0 = No, 1 = Si);Microfilmación  (0 = No, 1 = Si);Selección (0 = No, 1 = Si);Observaciones

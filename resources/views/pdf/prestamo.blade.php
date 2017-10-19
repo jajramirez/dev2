@@ -1,0 +1,115 @@
+<html>
+<head>
+  <style>
+    @page { margin: 150px 50px; }
+    #header { position: fixed; left: 0px; top: -100px; right: 0px; height: 150px; }
+    #footer { position: fixed; left: 0px; bottom: -150px; right: 0px; height: 15  0px; }
+    #header .page:after { content: counter(page); }
+
+  
+
+  body {
+    font: 80% sans-serif;
+  }
+
+  </style>
+
+<body>
+  <div id="header">
+    <table width="100%">
+      <tr>
+        <td style="text-align: left;     font-size: 60%;"> 
+          Proceso: Solicitud de documentos en Préstamo
+        </td>
+        <td style="text-align: right;     font-size: 60%;">
+          Version: 1.0
+        </td>
+      </tr>
+    </table>
+
+
+    <table width="100%">
+      <tr>
+        <td rowspan="4" width="15%"> </td>
+        <td rowspan="4" width="70%">
+          <table width="100%">
+            <tr>
+              <td><strong>CONVENIO ADMINISTRATIVO 183-2017 ESAP-TELEBUCARAMANGA</strong></td>
+            </tr>
+            <tr>
+              <td><strong>Formato 001:  Entrega de Documentos en Préstamo</strong></td>
+            </tr>
+          </table>
+        </td>
+        <td rowspan="4" width="15%"><p>&nbsp;</p></td>
+      </tr>
+      <tr>
+       
+      </tr>
+    </table>   
+  </div>
+  <div id="footer">
+
+
+  </div>
+  <div id="content">
+      <table width="100%" border="1" cellspacing=0 cellpadding=2 >
+        <tr>
+          <td width="50%" style="background:#c4c4c4"><strong>FECHA DE ENTREGA</strong></td>
+          <td width="50%">{{$request->FEC_ENTR}}</td>
+          <td width="50%" style="background:#c4c4c4"><strong>No</strong></td>
+          <td width="50%">{{$cod_expe}}</td>
+        </tr>
+         <tr>
+          <td colspan="2" style="background:#c4c4c4"><strong>OFICINA SOLICITANTE</strong></td>
+          <td colspan="2">{{$request->SID_OFCI}}</td>
+        </tr>
+        <tr>
+          <td colspan="2" style="background:#c4c4c4"><strong>FUNCIONARIO QUIEN SOLICITA</strong></td>
+          <td colspan="2">{{$request->NOM_SOL}}</td>
+        </tr>
+      </table>
+
+    
+           
+      <p>&nbsp;</p>
+
+      <table width="100%" border="1" cellspacing=0 cellpadding=2 >
+        <tr>
+          <td colspan="1" style="background:#c4c4c4"><strong>SOPORTE</strong></td>
+          <td colspan="3">{{$request->DES_SOPO}}</td>
+        </tr>
+      </table>
+
+    <br/>
+    <table width="100%" border="1" cellspacing=0 cellpadding=2 >
+      <thead>
+        <tr>
+          <th style="background:#c4c4c4"><strong>ITEM</strong></th>
+          <th style="background:#c4c4c4"><strong>CAJA</strong></th>
+          <th style="background:#c4c4c4"><strong>CARPETA</strong></th>
+          <th style="background:#c4c4c4"><strong>Nro de carpetas contenidas en la caja</strong></th>
+          <th style="background:#c4c4c4"><strong>TIPO</strong></th>
+          <th style="background:#c4c4c4"><strong>OBSERVACION</strong></th>
+          <th style="background:#c4c4c4"><strong>FECHA DE SOLICITUD</strong></th>
+        </tr>
+      </thead>
+      
+      @if($recorrer != null)
+      <?php for ($i =0; $i < count($recorrer); $i++) { ?>
+          <tr>
+            <td><?php echo $recorrer[$i]->NUM_REGI ?></td>
+            <td><?php echo $recorrer[$i]->SID_CAJA ?></td>
+            <td><?php echo $recorrer[$i]->SID_CARP ?></td>
+            <td><?php echo $recorrer[$i]->SID_CONT ?></td>
+            <td><?php echo $recorrer[$i]->SID_TIPO ?></td>
+            <td><?php echo $recorrer[$i]->SID_OBSE ?></td>
+            <td><?php echo $recorrer[$i]->FEC_SOLI ?></td>
+          </tr>
+      <?php } ?>
+      @endif
+    </table>
+
+  </div>
+</body>
+</html>
