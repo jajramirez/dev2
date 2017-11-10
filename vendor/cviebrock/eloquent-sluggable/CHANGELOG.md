@@ -1,5 +1,15 @@
 # Change Log
 
+## 4.2.5 - 31-Aug-2017
+
+- Fixing composer requirements to support Laravel 5.4 only
+
+
+## 4.2.4 - 04-Jul-2017
+
+- Documentation change (#374, thanks @fico7489)
+
+
 ## 4.2.3 - 18-Apr-2017
 
 - Switch to allow extending the class (#356, thanks @haddowg)

@@ -183,6 +183,7 @@ return [
         Laracasts\Flash\FlashServiceProvider::class,
         'Maatwebsite\Excel\ExcelServiceProvider',
         Barryvdh\DomPDF\ServiceProvider::class,
+        Yajra\Oci8\Oci8ServiceProvider::class,
     ],
 
     /*
@@ -235,6 +236,8 @@ return [
         'Html' => Collective\Html\HtmlFacade::class,
         'Excel' => 'Maatwebsite\Excel\Facades\Excel',
         'PDF' => 'Barryvdh\DomPDF\Facade',
+        'DNS1D' => Milon\Barcode\Facades\DNS1DFacade::class,
+        'DNS2D' => Milon\Barcode\Facades\DNS2DFacade::class
     ],
 
 ];

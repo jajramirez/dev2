@@ -88,7 +88,6 @@
           <th style="background:#c4c4c4"><strong>ITEM</strong></th>
           <th style="background:#c4c4c4"><strong>CAJA</strong></th>
           <th style="background:#c4c4c4"><strong>CARPETA</strong></th>
-          <th style="background:#c4c4c4"><strong>Nro de carpetas contenidas en la caja</strong></th>
           <th style="background:#c4c4c4"><strong>TIPO</strong></th>
           <th style="background:#c4c4c4"><strong>OBSERVACION</strong></th>
           <th style="background:#c4c4c4"><strong>FECHA DE SOLICITUD</strong></th>
@@ -101,7 +100,6 @@
             <td><?php echo $recorrer[$i]->NUM_REGI ?></td>
             <td><?php echo $recorrer[$i]->SID_CAJA ?></td>
             <td><?php echo $recorrer[$i]->SID_CARP ?></td>
-            <td><?php echo $recorrer[$i]->SID_CONT ?></td>
             <td><?php echo $recorrer[$i]->SID_TIPO ?></td>
             <td><?php echo $recorrer[$i]->SID_OBSE ?></td>
             <td><?php echo $recorrer[$i]->FEC_SOLI ?></td>

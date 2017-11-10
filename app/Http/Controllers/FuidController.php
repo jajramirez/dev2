@@ -12,7 +12,7 @@ use App\SID_ENTI;
 use App\SID_ORGA;
 use App\SID_FUID;
 use App\SID_CCD;
-
+use MBarryvdh\DomPDF\Facade;
 
 class FuidController extends Controller
 {
@@ -246,5 +246,44 @@ class FuidController extends Controller
     public function update(Request $request, $id)
     {
 
-    }      
+    }    
+
+    public function  etiquetas(Request $requesst)
+    {
+        return view('fuid.etiquetas');
+    }  
+
+    public function pdf(Request $request)
+    {
+	
+	date_default_timezone_set('America/Bogota');
+        $FEC_ACTU = strftime( "%Y-%m-%d", time() );
+
+
+	$fuid = DB::table('V_SIS_FUID')
+	    ->where('V_SIS_FUID.CON_BODE', '=', $request->CON_BODE)
+            ->join('SID_ORGA', 'V_SIS_FUID.COD_ORGA', '=', 'SID_ORGA.COD_ORGA')
+            ->select('V_SIS_FUID.*', 'SID_ORGA.NOM_ORGA')
+            ->get();
+	//dd($fuid);
+
+        $view =  \View::make('pdf.etiquetas', compact('fuid', 'FEC_ACTU'))->render();
+        $pdf = \App::make('dompdf.wrapper');
+        $pdf->loadHTML($view);
+        $name = time();
+        $filename =  public_path() ."/documentos/etiquetas". $name. ".pdf";
+        file_put_contents($filename, $pdf->stream('etiquetas'));
+        return $name;
+    }
+
+    public function datos(Request $request)
+    {
+        $fuid = DB::table('V_SIS_FUID')
+        ->where('V_SIS_FUID.CON_BODE', '=', $request->CON_BODE)
+            ->join('SID_ORGA', 'V_SIS_FUID.COD_ORGA', '=', 'SID_ORGA.COD_ORGA')
+            ->select('V_SIS_FUID.*', 'SID_ORGA.NOM_ORGA')
+            ->get();
+
+        return json_encode($fuid);
+    }
 }

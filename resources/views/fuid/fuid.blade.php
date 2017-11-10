@@ -246,7 +246,7 @@
 							<!--<td><a href="documentos/{{ $dato->NOM_ARCH}}" download><i class="fa fa-eye" aria-hidden="true"></i></a> </td> -->
 							<td>
 								@if( $dato->NOM_ARCH != null)
-								<button type="button" class="btn btn-primary" data-toggle="modal" data-target=".bs-example-modal-lg" 	onclick="cargarmodal('{{ $dato->NOM_ARCH}}')">
+								<button type="button" class="btn btn-primary" data-toggle="modal" data-target=".bs-example-modal-lg" 	onclick="cargarmodal('{{$dato->PATH}}','{{ $dato->NOM_ARCH}}')">
 									<i class="fa fa-eye" aria-hidden="true"></i>
 								</button>
 								@endif
@@ -384,13 +384,22 @@ $(document).ready(function() {
 	<script type="text/javascript">
 		  $(".select2").select2();
 
-		  function cargarmodal(data)
+		  function cargarmodal(ruta, data)
 		  {
-		  		url = "{{url('/')}}"; 
+		  		
+		  		if(ruta == '' )
+				{
+					url = "{{url('/')}}";
+					url = url+'/documentos/'
+				}
+				else
+				{
+					url = ruta;
+				}
 
-		  		res = '<iframe src="https://docs.google.com/viewerng/viewer?url='+url+'/documentos/'
-		  		+data
+		  		res = '<iframe src="https://docs.google.com/viewerng/viewer?url='+url+data
 		  		+'&embedded=true" style="border: none; width:100%; height: 35em;"></iframe>';
+
 		  	$("#contenidomodal").html(res);
 		  }
 

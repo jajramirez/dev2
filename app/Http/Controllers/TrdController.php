@@ -24,7 +24,6 @@ class TrdController extends Controller
         $this->middleware('auth');
     }
 
-     //
     public function index(Request $request)
     {
 
@@ -224,19 +223,19 @@ class TrdController extends Controller
     {
 
         $data = explode('_', $id);
-	$trd = SID_FUID::where('COD_TRD', '=', $data[1])->get();
+    	$trd = SID_FUID::where('COD_TRD', '=', $data[1])->get();
         if(count($trd)>0)
-	{
-	Flash::success("No se puede eliminar un registro con uso en lista FUID.");
-        return redirect()->route('trd.index');
-	}
-	else{
-	$seri = SID_TRD::where('COD_TRD', '=', $data[1])
-            ->where('COD_ENTI', '=', $data[0])
-            ->delete();
-        Flash::success("Se ha eliminado correctamente");
-        return redirect()->route('trd.index');
-	}
+    	{
+    	   Flash::success("No se puede eliminar un registro con uso en lista FUID.");
+            return redirect()->route('trd.index');
+    	}
+    	else{
+    	   $seri = SID_TRD::where('COD_TRD', '=', $data[1])
+                ->where('COD_ENTI', '=', $data[0])
+                ->delete();
+            Flash::success("Se ha eliminado correctamente");
+            return redirect()->route('trd.index');
+    	}
     }
 
     public function edit($id)
@@ -795,4 +794,19 @@ class TrdController extends Controller
 
 
     } 
+
+    public function buscarfuid(Request $request)
+    {
+        $trd = SID_FUID::where('COD_TRD', '=', $request->COD_TRD)->get(); 
+        echo '<option value="" selected>Seleccione una opcion</option>'; 
+        foreach ($trd as $c ){
+             echo '<option value="'.$c->NUM_REGI.'" >'.$c->NUM_ORDE.' - ' .$c->NOM_ASUN. '</option>';
+        }
+    }
+
+    public function datostrd(Request $request)
+    {
+       $trd = SID_FUID::where('NUM_REGI', '=', $request->NUM_REGI)->get();  
+       return json_encode($trd[0]);
+    }
 }

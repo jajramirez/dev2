@@ -71,13 +71,13 @@ class ExpedientesController extends Controller
                 $expedientes->where('V_SID_EXPE.COD_TIPO'  , 'like', "$request->COD_SERI%" );
             }
 
-            $datos = $expedientes->get();
+            $datos = $expedientes
+            ->join('SID_ORGA', 'V_SID_EXPE.COD_ORGA', '=', 'SID_ORGA.COD_ORGA')
+            ->select('V_SID_EXPE.*', 'SID_ORGA.PATH')
+            ->get();
 
 
-
-
-
-           if($request->COD_SERI != null && $request->COD_SUBS != null)
+           if($request->COD_SERI != null )
             {
 
 
@@ -126,6 +126,7 @@ class ExpedientesController extends Controller
         {
             $datos = null;
         }
+
 
         $orga = SID_ORGA::all();
         $seri = SID_SERI::all();

@@ -26,7 +26,7 @@ class PrestamosController extends Controller
 
     public function index(Request $request)
     {
-    	
+        
         $prestamos = DB::table('SID_PRES')
             ->get();
 
@@ -40,8 +40,9 @@ class PrestamosController extends Controller
 
     public function prestamo(Request $request)
     {
-        $encabezado = null;
 
+        $encabezado = null;
+        //dd($request);
         $datos = null;
         if($request->proceso == "A")
         {
@@ -60,50 +61,71 @@ class PrestamosController extends Controller
 
             $encabezado = Session::get('encabezado');
             $desc_caja = null;
-            if($request->SID_CAJA_C == "Completa")
-            {   
-                $desc_caja = "Caja Completa";
-            }
-            else
-            {
-                $desc_caja = $request->SID_CAJA;
-            }
-            $codtrd = null;
-            if($request->COD_SUBS == null)
-            {
-                $codtrd = $request->COD_ORGA . '.' . $request->COD_SERI ;
-            }
-            else
-            {
-                $codtrd = $request->COD_ORGA . '.' . $request->COD_SERI . '.' . $request->COD_SUBS;
-            }
-
-            $array = array("COD_ORGA" => $request->COD_ORGA,
-                          "COD_TRD" => $codtrd ,
-                          "COD_SERI" => $request->COD_SERI,
-                          "COD_SUBS" => $request->COD_SUBS,
-                          "SID_CAJA" => $desc_caja,
-                          "SID_CARP" => $request->SID_CARP,
-                          "SID_CONT" => $request->SID_CONT,
-                          "SID_TIPO" => $request->SID_TIPO,
-                          "FEC_SOLI" => $request->FEC_SOLI,
-                          "SID_OBSE" => $request->SID_OBSE);
-            
-            $secuencia = array($array);
 
             if($request->proceso == "D")
             {
-                if($datos == null)
-                {
-                    $datoscompletos = $secuencia;   
+                if($request->SID_CAJA_C == "Completa")
+                {   
+                    $array= array("CON_BODE" => $request->CON_BODE,
+                              "SID_CARP" => "caja Completa",
+                              "SID_TIPO" => $request->SID_TIPO,
+                              "FEC_SOLI" => $request->FEC_SOLI,
+                              "SID_OBSE" => $request->SID_OBSE);
+
+                    $secuencia= array($array);
+
+                    if($datos == null)
+                    {
+                        $datoscompletos = $secuencia;   
+                    }
+                    else
+                    {
+                        $datoscompletos = array_merge($datos, $secuencia);
+                    }
+
+                    
+                    Session::put('datos', $datoscompletos );
+                    $datos = Session::get('datos');
+
                 }
                 else
                 {
-                    $datoscompletos = array_merge($datos, $secuencia);
-                }
+
+                    $cajas = $request->cajas;
                 
-                Session::put('datos', $datoscompletos );
-                $datos = Session::get('datos');
+                    for($i=0; $i < count($cajas); $i++)
+                    {
+                        $array[$i] = array("CON_BODE" => $request->CON_BODE,
+                              "SID_CARP" => $cajas[$i],
+                              "SID_TIPO" => $request->SID_TIPO,
+                              "FEC_SOLI" => $request->FEC_SOLI,
+                              "SID_OBSE" => $request->SID_OBSE);
+
+                        $secuencia= array($array[$i]);
+
+                       if($datos == null)
+                        {
+                            if($i == 0)
+                            {
+                                $datos = $secuencia;
+                            } 
+                            else
+                            {
+                                $datoscompletos = array_merge($datos, $secuencia);
+                            }
+                        }
+                        else
+                        {
+                            $datoscompletos = array_merge($datos, $secuencia);
+                            $datos = $datoscompletos;
+                         
+                        }
+
+                    } 
+
+                    Session::put('datos', $datoscompletos );
+                    $datos = Session::get('datos');               
+                }
             }
 
              if($request->proceso == "E")
@@ -121,8 +143,9 @@ class PrestamosController extends Controller
              }
 
         }
-	   return view('prestamos.create')
-	       ->with('encabezado', $encabezado)
+
+       return view('prestamos.create')
+           ->with('encabezado', $encabezado)
            ->with('datos', $datos);
 
     }
@@ -156,8 +179,6 @@ class PrestamosController extends Controller
         
             $cod_expe = $max[0]->max + 1;
 
-
-
             $prestamo=SID_PRES::create([
                 'SID_PRES'=> $cod_expe, 
                 'FEC_ENTR'=> $fecha_entrega,
@@ -179,10 +200,8 @@ class PrestamosController extends Controller
                 }
                 $inserta = SID_PRES_DETA::create([
                     'SID_PRES'=> $cod_expe, 
-                    'COD_TRD' => $recorrer[$i]->COD_TDR, 
                     'SID_CAJA'=> $recorrer[$i]->SID_CAJA, 
                     'SID_CARP'=> $recorrer[$i]->SID_CARP,  
-                    'SID_CONT'=> $recorrer[$i]->SID_CONT, 
                     'SID_TIPO'=> $recorrer[$i]->SID_TIPO,
                     'SID_OBSE'=> $recorrer[$i]->SID_OBSE, 
                     'FEC_SOLI'=> $fecha_solcitud
@@ -214,7 +233,7 @@ class PrestamosController extends Controller
         }
         else
         {
-            $respuesta = "error";
+            //$respuesta = "error";
         }
        
         echo $respuesta;
@@ -292,6 +311,54 @@ class PrestamosController extends Controller
     public function actualizaarray(Request $request)
     {
 
+    }
+
+    public function entrega($id)
+    {
+        $prestamos = DB::table('SID_PRES')
+            ->where('SID_PRES', '=', $id)
+            ->get();
+
+        $detalles = DB::table('SID_PRES_DETA')
+            ->where('SID_PRES', '=', $id)
+            ->get();
+
+        return view('prestamos.entrega')
+         ->with('prestamos', $prestamos[0])
+         ->with('detalles', $detalles)
+         ->with('id', $id);
+    }
+
+    public function devolver(Request $request)
+    {
+        $fecha_entrega =  substr($request->FEC_DEV,6,4) .'-'.substr($request->FEC_DEV,0,2) .'-'. substr($request->FEC_DEV,3,2);
+        $seri = SID_PRES::where('SID_PRES', '=', $request->id)
+            ->update(['FEC_DEVOL' => $fecha_entrega]);
+
+        //Flash::success("Se proceso  correctamente la devolución");
+        //return redirect()->route('prestamo.index');
+
+        $prestamos = DB::table('SID_PRES')
+            ->where('SID_PRES', '=', $request->id)
+            ->get();
+        $detalles = DB::table('SID_PRES_DETA')
+            ->where('SID_PRES', '=', $request->id)
+            ->get();
+
+        $prestamo = $prestamos[0];
+
+        $recorrer = $detalles;   
+
+       
+        $view =  \View::make('pdf.devolucion', compact('prestamo', 'recorrer', 'fecha_entrega'))->render();
+        $pdf = \App::make('dompdf.wrapper');
+        $pdf->loadHTML($view);
+        $name = time();
+        $filename =  public_path() ."/documentos/devolucion". $name. ".pdf";
+        file_put_contents($filename, $pdf->stream('devolucion'));
+        //$pdf->download('prestamo.pdf');
+        return $name;
+        
     }
 
 

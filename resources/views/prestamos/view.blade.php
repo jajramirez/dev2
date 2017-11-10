@@ -59,10 +59,8 @@ Detalle  Préstamo
 <table id='datainfo' class="table table-bordered table-hover">
     <thead>
         <th>Ítem</th>
-        <th>Código</th>
-        <th>Caja</th>
+        <th>No. de Caja'</th>
         <th>Carpeta</th>
-        <th>Carpetas contenidas</th>
         <th>Tipo</th>
         <th>Observación</th>
         <th>Fecha solicitud</th>
@@ -72,10 +70,8 @@ Detalle  Préstamo
         @foreach($detalles as $d)
         <tr>
             <td> {{$d->SID_COD}}</td>
-            <td> {{$d->COD_TRD}}</td>
             <td> {{$d->SID_CAJA}}</td>
             <td> {{$d->SID_CARP}}</td>
-            <td> {{$d->SID_CONT}}</td>
             <td> {{$d->SID_TIPO}}</td>
             <td> {{$d->SID_OBSE}}</td>
             <td> {{$d->SID_OBSE}}</td>

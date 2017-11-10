@@ -95,10 +95,8 @@ Nuevo  Préstamo
 <table id='datainfo' class="table table-bordered table-hover">
     <thead>
         <th>Ítem</th>
-        <th>Código</th>
-        <th>Caja</th>
+        <th>No. de Caja</th>
         <th>Carpeta</th>
-        <th>Carpetas contenidas</th>
         <th>Tipo</th>
         <th>Observación</th>
         <th>Fecha solicitud</th>
@@ -113,23 +111,14 @@ Nuevo  Préstamo
             $fila = $datos[$i];
             echo "<tr id='fila".$i."'>";
             echo "<td>" . $item++ . "</td>";
-            echo "<td>" . $fila['COD_TRD'] . "</td>";
-            echo "<td>" . $fila['SID_CAJA'] . "</td>";
+            echo "<td>" . $fila['CON_BODE'] . "</td>";
             echo "<td>" . $fila['SID_CARP'] . "</td>";
-            echo "<td>" . $fila['SID_CONT'] . "</td>";
             echo "<td>" . $fila['SID_TIPO'] . "</td>";
             echo "<td>" . $fila['SID_OBSE'] . "</td>";
             echo "<td>" . $fila['FEC_SOLI'] . "</td>";
             echo "<td>";
        
     ?>
-
-            {!! Form::open(['route' => 'prestamo.editardetalle' , 'method' => 'POST'])!!}
-                <input type="text" value="(<?php echo $i ?>)"  name="item" style="display:none">
-                <button type="submit" class="btn btn-warning" title="Editar Registro">
-                    <span class="fa fa-pencil" aria-hidden="true"> </span>
-                </button>  
-            {!! Form::close() !!}
 
             <a href="#" 
                 class="btn btn-danger fa fa-times" title="Eliminar Registro" 
@@ -259,21 +248,13 @@ $('table tbody tr').each(function (i, tr) {
         {
             obj["NUM_REGI"] = $tds.eq(index).text();
         }
-        if($(th).text()  == "Código")
-        {
-            obj["COD_TDR"] = $tds.eq(index).text();
-        }
-        if($(th).text()  == "Caja")
+        if($(th).text()  == "No. de Caja")
         {
             obj["SID_CAJA"] = $tds.eq(index).text();
         }
         if($(th).text()  == "Carpeta")
         {
             obj["SID_CARP"] = $tds.eq(index).text();
-        }
-        if($(th).text()  == "Carpetas contenidas")
-        {
-            obj["SID_CONT"] = $tds.eq(index).text();
         }
         if($(th).text()  == "Tipo")
         {
@@ -314,8 +295,10 @@ $.ajax({
         if(data != "error")
         {
                 urlb = "{{url('/')}}"; 
-                var url = urlb+"/documentos/prestamo"+data+".pdf";   
-                window.open(url, 'Download');
+                var redirect = "{{ route('prestamo.index')}}";
+                var url = urlb+"/documentos/prestamo"+data+".pdf";
+                window.open(url, "", "width=800,height=800");
+                window.location.replace(redirect);
         }
 
     }

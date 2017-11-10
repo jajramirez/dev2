@@ -85,7 +85,6 @@ trait AuthenticatesUsers
      */
     protected function credentials(Request $request)
     {
-       //dd($request);
         return $request->only($this->username(), 'CON_USUA');
     }
 
@@ -156,9 +155,7 @@ trait AuthenticatesUsers
     {
         $this->guard()->logout();
 
-        $request->session()->flush();
-
-        $request->session()->regenerate();
+        $request->session()->invalidate();
 
         return redirect('/');
     }

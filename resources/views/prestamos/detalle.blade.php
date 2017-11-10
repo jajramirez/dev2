@@ -33,64 +33,34 @@ Nuevo  Ítem
 
 {!! Form::open(['route' => 'prestamo.prestamo' , 'method' => 'POST' ,'id' =>'createR'])!!}
  <input type="text" name="proceso" value="D" style="display:none">
-<div class='form-group col-md-12'>
-    {!! Form::label('TRD', 'Código TRD')!!}
-    {!! Form::text('TRD', null, ['class' => 'form-control' , 'placeholder' => '', 'disabled', 'id' => 'TRD'])!!}
-</div>
-
-<div class="form-group col-md-4">
-    <label>Oficina Productora</label>
-    <select id='COD_ORGA' name='COD_ORGA' class="form-control select2" style="width: 100%;" required onchange="codigoTRD()">
-        <option value="">Seleccione una opcion</option>
-        @foreach($orgas as $orga)
-        <option value="{{$orga->COD_ORGA}}">{{$orga->NOM_ORGA}}</option>
-        @endforeach
-    </select>
+ <div class="col-md-12">
+    <div class='form-group'>
+    
+        {!! Form::label('CON_BODE', 'No. de Caja')!!} 
+        
+        {!! Form::text('CON_BODE', null, ['class' => 'form-control' , 'placeholder' => '', 'id'=>'CON_BODE', 'required', 'onblur'=> 'BuscarCajas()'])!!}  
+    </div>
 </div>
 
 
-<div class="form-group col-md-4">
-    <label>Código Serie</label>
-    <select name='COD_SERI' id='COD_SERI' class="form-control select2" style="width: 100%;" required onchange="cargarSubs()">
-        <option value="">Seleccione una opcion</option>
-        @foreach($series as $seri)
-        <option value="{{$seri->COD_SERI}}">{{$seri->NOM_SERI}}</option>
-        @endforeach
-    </select>
-</div>
-
-
-<div class='form-group col-md-4'>
-    {!! Form::label('COD_SUBS', 'Sub Serie')!!}
-    <select id="COD_SUBS" name='COD_SUBS' class="form-control select2" style="width: 100%;" onchange="codigoTRD()">
-        <option value="">Seleccione una subserie</option>
-    </select>
-</div>
-
-
-<div class="col-md-4">
+<div class="col-md-12">
     <div class='form-group'>
         <div class="col-md-5">
-            {!! Form::label('SID_CAJA', 'Caja      ')!!} 
+            {!! Form::label('SID_CAJA', 'Carpeta      ')!!} 
         </div> 
         <div class="col-md-7">
             <input type="checkbox" id="SID_CAJA_C" name="SID_CAJA_C" value="Completa">Caja Completa
         </div>
-        {!! Form::text('SID_CAJA', null, ['class' => 'form-control' , 'placeholder' => '', 'id'=>'SID_CAJA', 'required'])!!}  
+          <select name="cajas[]" id="cajas" data-placeholder="Seleccione la caja" multiple="multiple" class="form-control select2" style="width: 100%;">
+         
+         </select>
+   
+
+
+
+
     </div>
 </div>
-<div class="col-md-4">
-    <div class='form-group'>
-        {!! Form::label('SID_CARP', 'Carpeta')!!}
-        {!! Form::text('SID_CARP', null, ['class' => 'form-control' , 'placeholder' => '', 'required'])!!}          
-    </div>
-</div>
-<div class="col-md-4">
-    <div class='form-group'>
-        {!! Form::label('SID_CONT', 'Carpetas Contenidas')!!}
-        {!! Form::text('SID_CONT', null, ['class' => 'form-control' , 'placeholder' => ''])!!}          
-    </div>
-</div>  
 
 <div class="col-md-4">
     <div class='form-group'>
@@ -135,87 +105,48 @@ Nuevo  Ítem
                    $('#datepicker').datepicker({
                        autoclose: true
                    });
-                   $('#datepicker2').datepicker({
-                       autoclose: true
-                   });
-                   $('#datepicker3').datepicker({
-                       autoclose: true
-                   });
-                   $('#datepicker4').datepicker({
-                       autoclose: true
-                   });
-
 
                     $( "#SID_CAJA_C" ).on( "click", function() {
                       $("#SID_CAJA").val("");
                       var caja = $( "input:checked" ).val();
                       if(caja == "Completa")
                       {
-                        $("#SID_CAJA").attr('disabled', 'disabled');
-                        $("#SID_CAJA").removeAttr('required');
+                        $("#cajas").attr('disabled', 'disabled');
+                        $("#cajas").removeAttr('required');
                       }
                       else
                       {
-                         $("#SID_CAJA").removeAttr('disabled');
-                         $("#SID_CAJA").attr('required', 'required');
+                         $("#cajas").removeAttr('disabled');
+                         $("#cajas").attr('required', 'required');
                       }
 
                     });
-                   function cargarSubs()
-                   {
-                       var cod_seri = $("#COD_SERI").val();
-                       codigoTRD();
-                       var PostUri = "{{ route('seris.buscarccd')}}";
+
+                  function BuscarCajas()
+                  {
+                       var CON_BODE = $("#CON_BODE").val();
+                       var PostUri = "{{ route('fuid.datos')}}";
 
                        $.ajax({
                            url: PostUri,
                            type: 'post',
                            data: {
-                               cod_seri: cod_seri
+                               CON_BODE: CON_BODE
                            },
                            headers: {
                                'X-CSRF-TOKEN': "{{ Session::token() }}", //for object property name, use quoted notation shown in second
                            },
                            success: function (data) {
-                               var comilla = '"';
-                               if (data != "<option value=" + comilla + comilla + ">Seleccione una subserie</option>")
-                               {
-
-                                   $("#COD_SUBS").attr('required', 'required');
-                               } else
-                               {
-                                   $("#COD_SUBS").removeAttr('required');
-                               }
-
-
-                               $("#COD_SUBS").html(data);
+                              $("#cajas").html(data);
+                              var types = JSON.parse(data);
+                              for(x=0; x<types.length; x++) {
+                                    $("#cajas").append("<option value='"+types[x].NUM_CARP+"'>"+types[x].NUM_CARP+"</option>");
+                              }
 
                            }
                        });
 
-                   }
-
-                   function codigoTRD()
-                   {
-
-                       var oficina = $("#COD_ORGA").val();
-                       var cod_seri = $("#COD_SERI").val();
-                       if (cod_seri.length > 0)
-                       {
-                           cod_seri = '.' + $("#COD_SERI").val();
-
-                       }
-
-                       var cod_subs = $("#COD_SUBS").val();
-                       if (cod_subs.length > 0)
-                       {
-                           cod_subs = '.' + $("#COD_SUBS").val();
-
-                       }
-                       var trd = oficina + cod_seri + cod_subs;
-                       $("#TRD").val(trd);
-                   }
-
+                  }
 </script>
 
 

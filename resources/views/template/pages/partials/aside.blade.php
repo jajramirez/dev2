@@ -16,7 +16,7 @@
           </a>
           <ul class="treeview-menu">
             <?php
-              $class = array('','','','','','','','','','', '');
+              $class = array('','','','','','','','','','', '', '', '', '');
               $url = \Request::getPathInfo();
               $url_array = explode('/', $url);
               if($url_array[1]=="dependencias")
@@ -67,13 +67,28 @@
               {
                 $class[7] = 'class=active';
               }
+               if($url_array[1]=="pdf")
+              {
+                $class[10] = 'class=active';
+              }
+              if($url_array[1]=="barras")
+              {
+                $class[13] = 'class=active';
+                $class[12] = 'class=active';
+              }
+    
 	      if(count($url_array) >  2 ) {
               if($url_array[2]=="cargararchivo")
               {
                 $class[3] = '';
                 $class[9] = 'class=active';
               }
-	      
+	           
+              if($url_array[2]=="etiquetas")
+              {
+                $class[11] = 'class=active';
+                $class[12] = 'class=active';
+              }
               }
 
             ?>
@@ -87,7 +102,7 @@
             <li {{$class[4]}}><a style="font-size:90%;" href="{{ route('home.fuid') }}"><i class="fa fa-circle-o"></i> FUID</a></li>
             <li {{$class[5]}}><a href="{{ route('home.carga') }}"><i class="fa fa-circle-o"></i> Carga de FUID</a></li>
             <li {{$class[6]}}><a style="font-size:90%;" href="{{ route('expedientes.index') }}"><i class="fa fa-circle-o"></i> Expedientes Electrónicos</a></li>
-            <li {{$class[7]}}><a style="font-size:90%;" href="#"><i class="fa fa-circle-o"></i> Reportes y Consulta</a>
+            <li {{$class[10]}}><a style="font-size:90%;" href="#"><i class="fa fa-circle-o"></i> Reportes y Consulta</a>
                <ul class="treeview-menu">
                 <li>
                   <a href="{{ route('pdf.index') }}">
@@ -100,12 +115,25 @@
               </ul>
 
             </li>
+            <li {{$class[7]}}><a style="font-size:90%;" href="{{ route('prestamo.index') }}"><i class="fa fa-circle-o"></i>Prestamos</a></li>
+
+
+            <li {{$class[12]}}><a style="font-size:90%;" href="#"><i class="fa fa-circle-o"></i> Etiquetas</a>
+               <ul class="treeview-menu">
+                <li {{$class[11]}}><a style="font-size:90%;" href="{{ route('fuid.etiquetas') }}"><i class="fa fa-circle-o"></i>Etiquetas de Carpeta</a></li>
+                <li {{$class[13]}}><a style="font-size:90%;" href="{{ route('barras.index') }}"><i class="fa fa-circle-o"></i>Etiquetas de Cajas</a></li>
+           
+              </ul>
+
+            </li>
+
+
             <li {{$class[8]}}><a style="font-size:90%;" href="{{ route('usuarios.index') }}"><i class="fa fa-circle-o"></i> Usuarios</a></li>
             @endif
 
             @if(Auth::user()->COD_ROLE == "2")
             <li {{$class[3]}}><a style="font-size:90%;" href="{{ route('trd.index') }}"><i class="fa fa-circle-o"></i> Tabla de Retención Documental</a></li>
-            <li {{$class[4]}}><a style="font-size:90%;" href="{{ route('home.fuid') }}"><i class="fa fa-circle-o"></i> FUID</a></li>
+            <li {{$class[4]}}><a style="font-size:90%;" href="{{ route('home.fuid') }}"><i class="fa fa-circle-o"></i> FUID</a></li><li {{$class[6]}}><a style="font-size:90%;" href="{{ route('expedientes.index') }}"><i class="fa fa-circle-o"></i> Expedientes Electrónicos</a></li>
              <li {{$class[5] }}><a href="{{ route('home.carga') }}"><i class="fa fa-circle-o"></i> Carga de FUID</a></li>
             <li {{$class[6]}}><a style="font-size:90%;" href="{{ route('expedientes.index') }}"><i class="fa fa-circle-o"></i> Expedientes Electrónicos</a></li>
             <li {{$class[7]}}><a style="font-size:90%;" href="#"><i class="fa fa-circle-o"></i> Reportes y Consulta</a>

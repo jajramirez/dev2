@@ -333,7 +333,7 @@
 					<td>{{ $expediente->NOM_RESO}} </td>
 					<td>{{ $expediente->NOM_IDIO}} </td>
 					<td>
-						<button type="button" class="btn btn-primary" data-toggle="modal" data-target=".bs-example-modal-lg" 	onclick="cargarmodal('{{ $expediente->NOM_ARCH}}')">
+						<button type="button" class="btn btn-primary" data-toggle="modal" data-target=".bs-example-modal-lg" 	onclick="cargarmodal('{{ $expediente->PATH}}','{{ $expediente->NOM_ARCH}}')">
 								<i class="fa fa-eye" aria-hidden="true"></i>
 						</button>
 
@@ -445,7 +445,7 @@ $(document).ready(function() {
             "infoFiltered": "(filtro desde _MAX_ total registros)",
             "search": "Buscar"
         }
-    });
+    });'{{ $expediente->NOM_ARCH}}'
   });
 });
 
@@ -453,16 +453,23 @@ $(".select2").select2();
 		  
 
 
-function cargarmodal(data)
+function cargarmodal(ruta, data)
 {
-	url = "{{url('/')}}"; 
-	res = '<iframe src="https://docs.google.com/viewerng/viewer?url='+url+'/documentos/'
-  		+data
+	if(ruta == '' )
+	{
+		url = "{{url('/')}}";
+		url = url+'/documentos/'
+	}
+	else
+	{
+		url = ruta;
+	}
+	res = '<iframe src="https://docs.google.com/viewerng/viewer?url='+url+data
   		+'&embedded=true" style="border: none; width:100%; height: 35em;"></iframe>';
   	$("#contenidomodal").html(res);
 }
 
-	window.onload=cargarSubs;
+window.onload=cargarSubs;
 
 	
 function cargarSubs()

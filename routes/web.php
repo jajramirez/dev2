@@ -99,7 +99,15 @@ Route::get('/home', 'HomeController@index')->name('home');
 				'uses' => 'TrdController@cargararchivo',
 				'as' =>  'trd.cargararchivo'
 			]);
-	Route::resource('/trd','TrdController');
+		Route::post('trd/buscarfuid', [
+				'uses' => 'TrdController@buscarfuid',
+				'as' =>  'trd.buscarfuid'
+			]);
+		Route::post('trd/datostrd', [
+				'uses' => 'TrdController@datostrd',
+				'as' =>  'trd.datostrd'
+			]);
+	Route::resource('/trd','TrdController', ['only'=> ['index','create','store', 'edit']]);
 
 
 	Route::resource('/expedientes','ExpedientesController');
@@ -150,7 +158,7 @@ Route::get('/home', 'HomeController@index')->name('home');
 			]);
 
 
-	Route::resource('/fuid','FuidController');
+	
 		Route::get('fuid/{id}/destroy', [
 				'uses' => 'FuidController@destroy',
 				'as' =>  'fuid.destroy'
@@ -159,6 +167,19 @@ Route::get('/home', 'HomeController@index')->name('home');
 				'uses' => 'FuidController@actualiza',
 				'as' =>  'fuid.actualiza'
 			]);
+		Route::get('fuid/etiquetas', [
+				'uses' => 'FuidController@etiquetas',
+				'as' =>  'fuid.etiquetas'
+			]);
+		Route::post('fuid/pdf', [
+				'uses' => 'FuidController@pdf',
+				'as' =>  'fuid.pdf'
+			]);
+		Route::post('fuid/datos', [
+				'uses' => 'FuidController@datos',
+				'as' =>  'fuid.datos'
+			]);
+	Route::resource('/fuid','FuidController', ['only'=> ['index','create','store', 'edit']]);
 
 		Route::resource('excel/{orga}/{seri}/','ExcelController');
 
@@ -189,7 +210,7 @@ Route::get('/home', 'HomeController@index')->name('home');
 		Route::resource('/meta','MetaController');
 
 
-		Route::resource('/prestamo','PrestamosController');
+		Route::resource('/prestamo','PrestamosController', ['only'=> ['index','create','store', 'edit']]);
 		Route::get('prestamo/{id}/destroy', [
 				'uses' => 'PrestamosController@destroy',
 				'as' =>  'prestamo.destroy'
@@ -226,92 +247,15 @@ Route::get('/home', 'HomeController@index')->name('home');
 				'as' =>  'prestamo.pdf'
 			]);
 
-
-
-
-
-//});
-
-
-//Route::group(['middleware' => ['operario']], function () {
-/*
-
-	Route::get('/cargafuid', [
-		'as' => 'home.carga', 
-		'uses' => 'HomeController@carga'
-		]);
-
-	Route::get('/listafuid', [
-		'as' => 'home.fuid', 
-		'uses' => 'HomeController@fuid'
-		]);
-
-
-	Route::post('/store', [
-		'as' => 'home.store', 
-		'uses' => 'HomeController@store'
-		]);
-
-
-	Route::resource('/trd','TrdController');
-		Route::get('trd/{id}/destroy', [
-				'uses' => 'TrdController@destroy',
-				'as' =>  'trd.destroy'
-			]);
-		Route::post('trd/actualizar', [
-				'uses' => 'TrdController@actualizar',
-				'as' =>  'trd.actualizar'
+		Route::get('prestamo/{id}/entrega', [
+				'uses' => 'PrestamosController@entrega',
+				'as' =>  'prestamo.entrega'
 			]);
 
-	Route::resource('/expedientes','ExpedientesController');
-		Route::get('expedientes/{id}/destroy', [
-				'uses' => 'ExpedientesController@destroy',
-				'as' =>  'expedientes.destroy'
-			]);	
-		Route::post('expedientes/actualiza', [
-				'uses' => 'ExpedientesController@actualiza',
-				'as' =>  'expedientes.actualiza'
+		Route::post('prestamo/devolver', [
+				'uses' => 'PrestamosController@devolver',
+				'as' =>  'prestamo.devolver'
 			]);
 
-		Route::get('detalle/expediente', [
-				'uses' => 'DetalleController@expedientes',
-				'as' =>  'detalles.expediente'
-			]);	
 
-		Route::get('detalle/exped/nuevo', [
-				'uses' => 'DetalleController@nuevo',
-				'as' =>  'detalles.nuevo'
-			]);	
-
-			Route::post('/detalle/actualiza', [
-				'uses' => 'DetalleController@actualiza',
-				'as' =>  'detalle.actualiza'
-			]);
-
-		Route::resource('/detalle','DetalleController');
-
-
-	Route::resource('/archivo','ArchivoController');
-		Route::get('archivo/{id}/destroy', [
-				'uses' => 'ArchivoController@destroy',
-				'as' =>  'archivo.destroy'
-			]);	
-		Route::post('archivo/actualiza', [
-				'uses' => 'ArchivoController@actualiza',
-				'as' =>  'archivo.actualiza'
-			]);
-
-	Route::resource('/fuid','FuidController');
-		Route::get('fuid/{id}/destroy', [
-				'uses' => 'FuidController@destroy',
-				'as' =>  'fuid.destroy'
-			]);	
-		Route::post('fuid/actualiza', [
-				'uses' => 'fuidController@actualiza',
-				'as' =>  'fuid.actualiza'
-			]);
-*/
-
-//});
-
-
+		Route::resource('/barras','BarraController');
